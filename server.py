@@ -123,3 +123,29 @@ def delete_by_id(id):
             return {'message': 'User deleted'}, 200
 
     return {'message': 'Person not found'}, 404
+
+@app.route('/person', methods = ['POST'])
+def add_person():
+    new_person = request.get_json()
+
+    if not new_person:
+        return {'message': 'Invalid input, no data provided'}, 422
+
+    try:
+        data.append(new_person)
+    except NameError:
+        return {'message': 'Data not defined'}
+
+    return {'message': 'New person added'}, 200
+
+@app.errorhandler(404)
+def api_not_found(error):
+    return {'message': 'API not found'}, 404
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    return {'message': str(e)}, 500
+
+@app.route("/test500")
+def test500():
+    raise Exception("Forced exception for testing")
